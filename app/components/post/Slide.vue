@@ -44,7 +44,14 @@ useEventListener(carouselEl, 'wheel', (e) => {
 				:title="article.description"
 				:to="article.path"
 			>
-				<UtilImg class="cover" :src="article.image" :alt="article.title" loading="lazy" />
+				<UtilImg
+					class="cover"
+					:src="article.image"
+					:alt="article.title"
+					:loading="index === 0 ? 'eager' : 'lazy'"
+					:fetchpriority="index === 0 ? 'high' : 'low'"
+					sizes="(max-width: 768px) 80vw, 28vw"
+				/>
 				<div class="info">
 					<div class="title text-creative">
 						{{ article.title }}

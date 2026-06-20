@@ -25,18 +25,13 @@ const listRecommended = computed(() => sort(
 	listRaw.value.filter(item => item?.recommend),
 	post => post.recommend || 0,
 	true,
-))
+).slice(0, 10))
 </script>
 
 <template>
 <BlogHeader class="mobile-only" to="/" tag="h1" />
 
-<ClientOnly>
-	<PostSlide v-if="listRecommended.length && page === 1 && !category" :list="listRecommended" />
-	<template #fallback>
-		<div class="slide-placeholder" />
-	</template>
-</ClientOnly>
+<PostSlide v-if="listRecommended.length && page === 1 && !category" :list="listRecommended" />
 
 <div class="post-list">
 	<div class="toolbar">
@@ -94,23 +89,5 @@ const listRecommended = computed(() => sort(
 
 .post-list {
 	margin: 1rem;
-}
-
-.slide-placeholder {
-	min-height: 200px;
-	margin: 1rem;
-	border-radius: 0.5rem;
-	background-color: var(--c-bg-2);
-	animation: pulse 1.5s ease-in-out infinite;
-}
-
-@keyframes pulse {
-	0%, 100% {
-		opacity: 0.4;
-	}
-
-	50% {
-		opacity: 0.6;
-	}
 }
 </style>

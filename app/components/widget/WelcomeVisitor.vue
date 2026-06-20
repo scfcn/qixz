@@ -433,9 +433,9 @@ function calculateDistance(data: IPLocation) {
 }
 
 // 获取用户IP位置信息
-async function fetchIPLocation() {
+async function fetchIPLocation(showLoading = true) {
 	// 重置状态
-	loading.value = true
+	loading.value = showLoading
 	errorMessage.value = null
 
 	try {
@@ -475,6 +475,9 @@ async function fetchIPLocation() {
 	}
 	catch (error) {
 		// 错误处理
+		if (!showLoading)
+			return
+
 		if (error instanceof Error) {
 			if (error.name === 'AbortError') {
 				errorMessage.value = '请求超时，请稍后重试'
@@ -501,7 +504,7 @@ async function fetchIPLocation() {
 
 // 组件挂载时初始化
 onMounted(() => {
-	runWhenIdle(fetchIPLocation, { delay: 800, timeout: 5000 })
+	runWhenIdle(() => fetchIPLocation(false), { delay: 800, timeout: 5000 })
 })
 </script>
 

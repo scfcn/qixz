@@ -137,22 +137,24 @@ const statusText = computed(() => {
 
 <template>
 <ClientOnly>
-	<Tooltip ref="service-status" :delay="200" placement="top">
-		<NuxtLink
-			:to="STATUS_PAGE_URL"
-			target="_blank"
-			class="service-status"
-			:class="`is-${statusType}`"
-		>
-			<span class="status-indicator">
-				<span class="status-dot" />
-			</span>
-			<span class="status-text">{{ statusText }}</span>
-		</NuxtLink>
-		<template #content>
-			<span>点击查看服务状态</span>
-		</template>
-	</Tooltip>
+	<span ref="service-status">
+		<Tooltip :delay="200" placement="top">
+			<NuxtLink
+				:to="STATUS_PAGE_URL"
+				target="_blank"
+				class="service-status"
+				:class="`is-${statusType}`"
+			>
+				<span class="status-indicator">
+					<span class="status-dot" />
+				</span>
+				<span class="status-text">{{ statusText }}</span>
+			</NuxtLink>
+			<template #content>
+				<span>点击查看服务状态</span>
+			</template>
+		</Tooltip>
+	</span>
 	<template #fallback>
 		<span class="service-status is-loading">
 			<span class="status-indicator">
