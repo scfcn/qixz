@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import PartialServiceStatus from '~/components/partial/ServiceStatus.vue'
+import { createLazyComponent } from '~/utils/lazy'
 
 const appConfig = useAppConfig()
+const PartialServiceStatus = createLazyComponent(() => import('~/components/partial/ServiceStatus.vue'))
 </script>
 
 <template>

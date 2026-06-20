@@ -9,7 +9,7 @@ const packages = Object.assign({}, ...Object.values(pnpmWorkspace.catalogs as an
 const [pm, pmVersion] = packageManager.split('@') as [string, string]
 
 const service = computed(() => ([
-	{ label: '全球加速', value: () => [h('img', { src: 'https://s3.qixz.cn/ywty/icons/edgeone.ico', alt: 'EdgeOne', width: 16, height: 16 }), 'EdgeOne'] },
+	{ label: '全球加速', value: () => [h('img', { src: 'https://s3.qixz.cn/ywty/icons/alibabacloud-color.svg', alt: 'ESA', width: 16, height: 16 }), 'ESA'] },
 	{ label: '构建平台', value: () => [h('img', { src: 'https://s3.qixz.cn/ywty/icons/cloudflare.ico', alt: 'Cloudflare', width: 16, height: 16 }), 'Cloudflare'] },
 	{ label: '图片存储', value: () => [h('img', { src: 'https://s3.qixz.cn/ywty/icons/ywty.ico', alt: '云雾图驿', width: 16, height: 16 }), '云雾图驿'] },
 	{ label: '文章许可', value: appConfig.copyright.abbr },
@@ -49,5 +49,6 @@ const expand = ref(false)
 	width: auto;
 	object-fit: contain;
 	vertical-align: sub;
+	margin-right: 0.35em;
 }
 </style>

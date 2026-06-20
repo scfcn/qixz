@@ -12,8 +12,12 @@ const props = withDefaults(defineProps<{
 	alt: '',
 })
 
+const FALLBACK_IMG = 'https://s3.qixz.cn/ywty/2026/06/20/6a366d2bcda01.webp'
+const FALLBACK_TIMEOUT = 1200
+
 const refinedSrc = ref(props.src)
 const referrerPolicy = ref<'no-referrer' | undefined>(undefined)
+let fallbackTimer: ReturnType<typeof setTimeout> | undefined
 
 onMounted(() => {
 	let src = props.src
@@ -26,7 +30,32 @@ onMounted(() => {
 		src = getImgUrl(src, props.mirror)
 	refinedSrc.value = src
 	referrerPolicy.value = props.mirror ? 'no-referrer' : undefined
+	startFallbackTimer()
 })
+
+onBeforeUnmount(() => {
+	clearFallbackTimer()
+})
+
+function clearFallbackTimer() {
+	if (fallbackTimer) {
+		clearTimeout(fallbackTimer)
+		fallbackTimer = undefined
+	}
+}
+
+function startFallbackTimer() {
+	clearFallbackTimer()
+	if (refinedSrc.value === FALLBACK_IMG)
+		return
+	fallbackTimer = setTimeout(useFallbackImg, FALLBACK_TIMEOUT)
+}
+
+function useFallbackImg() {
+	clearFallbackTimer()
+	if (refinedSrc.value !== FALLBACK_IMG)
+		refinedSrc.value = FALLBACK_IMG
+}
 </script>
 
 <template>
@@ -37,5 +66,7 @@ onMounted(() => {
 	:width="width"
 	:height="height"
 	:referrerpolicy="referrerPolicy"
+	@load="clearFallbackTimer"
+	@error="useFallbackImg"
 />
 </template>

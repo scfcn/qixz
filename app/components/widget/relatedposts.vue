@@ -68,13 +68,12 @@ function formatDate(date: string | undefined): string {
 				class="related-post-item"
 			>
 				<div v-if="post.image" class="post-thumbnail">
-					<NuxtImg
+					<UtilImg
 						:src="post.image"
 						:alt="post.title"
 						width="120"
 						height="80"
 						loading="lazy"
-						format="webp"
 					/>
 				</div>
 				<div class="post-content">

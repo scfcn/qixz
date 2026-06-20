@@ -44,7 +44,7 @@ useEventListener(carouselEl, 'wheel', (e) => {
 				:title="article.description"
 				:to="article.path"
 			>
-				<NuxtImg class="cover" :src="article.image" :alt="article.title" loading="lazy" />
+				<UtilImg class="cover" :src="article.image" :alt="article.title" loading="lazy" />
 				<div class="info">
 					<div class="title text-creative">
 						{{ article.title }}

@@ -308,8 +308,9 @@ const countryWelcomeMap: Record<string, string> = {
 const userLocation = shallowRef<IPLocation | null>(null)
 const welcomeText = ref(DEFAULT_WELCOME_TEXT)
 const distance = ref<number | null>(null)
-const loading = ref(true)
+const loading = ref(false)
 const errorMessage = ref<string | null>(null)
+const { runWhenIdle } = useBackgroundTask()
 
 // 计算属性
 const locationDescription = computed(() => {
@@ -500,7 +501,7 @@ async function fetchIPLocation() {
 
 // 组件挂载时初始化
 onMounted(() => {
-	fetchIPLocation()
+	runWhenIdle(fetchIPLocation, { delay: 800, timeout: 5000 })
 })
 </script>
 

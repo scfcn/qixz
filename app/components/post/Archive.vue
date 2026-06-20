@@ -36,7 +36,7 @@ const mainDate = computed(() => props.useUpdated ? props.updated : props.date)
 				day="2-digit"
 			/>
 		</template>
-		<NuxtImg v-if="image" class="article-cover" :src="image" :alt="title" loading="lazy" />
+		<UtilImg v-if="image" class="article-cover" :src="image" :alt="title" loading="lazy" />
 	</UtilLink>
 </li>
 </template>

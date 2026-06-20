@@ -17,6 +17,8 @@ interface HeartbeatResponse {
 const isLoading = ref(true)
 const hasError = ref(false)
 const data = ref<HeartbeatResponse | null>(null)
+const serviceStatus = useTemplateRef('service-status')
+const { runWhenVisible } = useBackgroundTask()
 let refreshTimer: ReturnType<typeof setInterval> | null = null
 
 async function fetchData() {
@@ -48,15 +50,42 @@ async function fetchData() {
 	}
 }
 
-onMounted(async () => {
+function clearRefreshTimer() {
+	if (refreshTimer) {
+		clearInterval(refreshTimer)
+		refreshTimer = null
+	}
+}
+
+function startRefreshTimer() {
+	clearRefreshTimer()
+	if (!document.hidden)
+		refreshTimer = setInterval(fetchData, 30000)
+}
+
+async function startServiceStatus() {
 	await fetchData()
-	refreshTimer = setInterval(fetchData, 30000)
+	startRefreshTimer()
+}
+
+function handleVisibilityChange() {
+	if (document.hidden) {
+		clearRefreshTimer()
+	}
+	else {
+		void fetchData()
+		startRefreshTimer()
+	}
+}
+
+onMounted(() => {
+	runWhenVisible(serviceStatus, startServiceStatus)
+	document.addEventListener('visibilitychange', handleVisibilityChange)
 })
 
 onUnmounted(() => {
-	if (refreshTimer) {
-		clearInterval(refreshTimer)
-	}
+	clearRefreshTimer()
+	document.removeEventListener('visibilitychange', handleVisibilityChange)
 })
 
 const failedCount = computed(() => {
@@ -108,7 +137,7 @@ const statusText = computed(() => {
 
 <template>
 <ClientOnly>
-	<Tooltip :delay="200" placement="top">
+	<Tooltip ref="service-status" :delay="200" placement="top">
 		<NuxtLink
 			:to="STATUS_PAGE_URL"
 			target="_blank"
