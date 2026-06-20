@@ -46,6 +46,8 @@ const expand = ref(false)
 
 .dl-group :deep(img) {
 	height: 1.2em;
+	width: auto;
+	object-fit: contain;
 	vertical-align: sub;
 }
 </style>
