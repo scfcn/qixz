@@ -128,7 +128,7 @@ const getCategoryCount = computed(() => (category: string) => {
 						<a class="equipment-link" :href="item.src" :title="`跳转到${item.name}的产品详情`" target="_blank" el="noopener noreferrer">
 							详情
 						</a>
-						<button class="comment-btn" type="button" aria-label="快速评论" @click="goComment(item.desc)">
+						<button class="comment-btn" type="button" aria-label="快速评论" @click="goComment(item.name)">
 							<Icon name="ph:chat-circle-bold" />
 						</button>
 					</div>
