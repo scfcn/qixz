@@ -65,7 +65,7 @@ export default defineAppConfig({
 				items: [
 					{ icon: 'ri:subway-line', text: '开往', url: 'https://www.travellings.cn/plain.html' },
 					{ icon: 'ph:bug-droid-bold', text: '揪蝉', url: 'https://www.jiuchan.org/' },
-					{ icon: 'streamline-ultimate-color:blogger-logo', text: 'BlogsClub', url: 'https://www.blogsclub.org/' },
+					{ icon: 'fa-solid:blog', text: 'BlogsClub', url: 'https://www.blogsclub.org/' },
 					{ icon: 'ph:cloud-bold', text: '八壹云', url: '/81x' },
 				],
 			},
@@ -75,7 +75,7 @@ export default defineAppConfig({
 					{ icon: 'ph:github-logo-bold', text: 'scfcn', url: 'https://github.com/scfcn' },
 					{ icon: 'ri:qq-line', text: '群: 665751334', url: 'https://qm.qq.com/q/veCtZrS51e' },
 					{ icon: 'ph:envelope-simple-bold', text: blogConfig.author.email, url: `mailto:${blogConfig.author.email}` },
-					{ icon: 'ph:house-bold', text: '筱栈主页', url: 'https://me.qixz.cn/' },
+					{ icon: 'fa:linux', text: 'LinuxDO', url: 'https://linux.do/u/qxzhan/summary' },
 				],
 			},
 			{

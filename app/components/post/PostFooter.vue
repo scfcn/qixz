@@ -7,6 +7,7 @@ defineOptions({ inheritAttrs: false })
 const props = defineProps<ArticleProps>()
 const appConfig = useAppConfig()
 const { donation } = appConfig
+const BAYI_CLOUD_URL = 'https://um.qixz.cn/q/iPBg8UYFH'
 const title = `${props.title} | ${appConfig.title}`
 const href = props.path ? new URL(props.path, appConfig.url).href : appConfig.url
 const { copy, copied } = useCopy(href)
@@ -78,7 +79,37 @@ const { copy, copied } = useCopy(href)
 				icon="ph:link"
 				@click="copy()"
 			/>
-			<div class="donate-container">
+			<div class="action-right">
+				<Tooltip :delay="200" interactive placement="top" max-width="">
+					<UtilLink class="promotion-card" :to="BAYI_CLOUD_URL" target="_blank">
+						<Icon class="promotion-icon" name="ph:cloud-bold" />
+						<span class="promotion-info">
+							<strong>八壹云</strong>
+							<small>高性价比云服务</small>
+						</span>
+						<Icon class="promotion-arrow" name="ph:arrow-right-bold" />
+					</UtilLink>
+					<template #content>
+						<div class="promotion-popover">
+							<div class="popover-header">
+								<Icon name="ph:cloud-bold" />
+								<span>八壹云</span>
+							</div>
+							<p class="popover-desc">稳定可靠的高性价比云服务提供商</p>
+							<div class="popover-features">
+								<span><Icon name="ph:hard-drives-bold" /> 轻量服务器</span>
+								<span><Icon name="ph:shield-check-bold" /> 高防 CDN</span>
+								<span><Icon name="ph:globe-bold" /> 域名注册</span>
+								<span><Icon name="ph:lock-simple-bold" /> SSL 证书</span>
+							</div>
+							<UtilLink class="popover-cta" :to="BAYI_CLOUD_URL" target="_blank">
+								立即了解
+								<Icon name="ph:arrow-right-bold" />
+							</UtilLink>
+						</div>
+					</template>
+				</Tooltip>
+				<div class="donate-container">
 				<UtilHydrateSafe>
 					<Tooltip v-if="donation?.enable" :delay="200" interactive :hide-on-click="false" max-width="">
 						<ZButton class="donate-button" icon="ph:heart-fill" text="赞赏作者" />
@@ -99,6 +130,7 @@ const { copy, copied } = useCopy(href)
 						</template>
 					</Tooltip>
 				</UtilHydrateSafe>
+			</div>
 			</div>
 		</div>
 	</section>
@@ -185,12 +217,132 @@ section {
 	}
 }
 
+.action-right {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	margin-left: auto;
+}
+
+.promotion-card {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.5em;
+	padding: 0.5em 0.8em;
+	border: 1px solid var(--c-border);
+	border-radius: 0.6em;
+	text-decoration: none;
+	transition: border-color 0.2s, background-color 0.2s;
+
+	&:hover {
+		border-color: var(--c-primary);
+		background-color: var(--c-bg-soft);
+	}
+}
+
+.promotion-icon {
+	flex-shrink: 0;
+	font-size: 1.4em;
+	color: var(--c-primary);
+}
+
+.promotion-info {
+	display: flex;
+	flex-direction: column;
+	gap: 0.1em;
+	line-height: 1.2;
+
+	strong {
+		color: var(--c-text);
+		font-size: 0.85em;
+	}
+
+	small {
+		color: var(--c-text-3);
+		font-size: 0.7em;
+	}
+}
+
+.promotion-arrow {
+	flex-shrink: 0;
+	font-size: 0.85em;
+	color: var(--c-text-3);
+	transition: color 0.2s, transform 0.2s;
+
+	.promotion-card:hover & {
+		color: var(--c-primary);
+		transform: translateX(0.15em);
+	}
+}
+
+.promotion-popover {
+	padding: 0.8rem;
+	font-size: 0.85rem;
+	line-height: 1.4;
+}
+
+.popover-header {
+	display: flex;
+	align-items: center;
+	gap: 0.4em;
+	font-size: 1.1em;
+	font-weight: 600;
+	color: var(--c-text);
+
+	.iconify {
+		color: var(--c-primary);
+		font-size: 1.3em;
+	}
+}
+
+.popover-desc {
+	margin: 0.4em 0 0.6em;
+	color: var(--c-text-2);
+}
+
+.popover-features {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 0.35em;
+	margin-bottom: 0.8em;
+
+	span {
+		display: flex;
+		align-items: center;
+		gap: 0.3em;
+		color: var(--c-text-2);
+
+		.iconify {
+			color: var(--c-primary);
+			font-size: 0.95em;
+		}
+	}
+}
+
+.popover-cta {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.3em;
+	padding: 0.4em 1em;
+	border-radius: 0.5em;
+	background-color: var(--c-primary);
+	color: var(--c-bg);
+	font-weight: 500;
+	text-decoration: none;
+	transition: opacity 0.2s;
+
+	&:hover {
+		opacity: 0.85;
+	}
+}
+
 :deep([data-tippy-root]) {
 	max-width: calc(100% - 1rem);
 
 	.tippy-box {
 		border: 1px solid var(--c-border);
 		background-color: var(--c-bg-2);
+		box-shadow: 0 4px 12px var(--ld-shadow);
 	}
 
 	.tippy-svg-arrow {

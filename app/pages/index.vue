@@ -4,7 +4,7 @@ import { sort } from 'radash'
 useHomeSeo()
 
 const layoutStore = useLayoutStore()
-layoutStore.setAside(['blog-stats', 'blog-tech', 'comm-group', 'welcome-visitor'])
+layoutStore.setAside(['blog-stats', 'blog-tech', 'comm-group', 'welcome-visitor', 'bayi-cloud'])
 
 const { data: listRaw } = await useAsyncData('index_posts', () => useArticleIndexOptions(), { default: () => [] })
 const { listSorted, isAscending, sortOrder } = useArticleSort(listRaw, { bindDirectionQuery: 'asc', bindOrderQuery: 'sort' })

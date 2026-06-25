@@ -25,10 +25,12 @@ const statusTone = computed(() => {
 	return 'fast'
 })
 const statusLabel = computed(() => {
-	if (isSelf.value || props.reachable === false)
+	if (isSelf.value)
 		return
+	if (props.reachable === false)
+		return '离线'
 	if (props.reachable && latencyMs.value !== undefined && latencyMs.value >= 0) {
-		if (props.latency > 1)
+		if (props.latency !== undefined && props.latency > 1)
 			return `${latencySeconds.value?.toFixed(1)} S`
 
 		return `${latencyMs.value} MS`
@@ -38,15 +40,12 @@ const statusTip = computed(() => {
 	if (props.reachable === false)
 		return '最近检测不可达'
 	if (statusLabel.value && latencyMs.value !== undefined) {
-		if (props.latency > 1)
+		if (props.latency !== undefined && props.latency > 1)
 			return `最近检测可达，响应约 ${latencySeconds.value?.toFixed(1)} 秒`
 
 		return `最近检测可达，响应约 ${latencyMs.value} ms`
 	}
 })
-const statusStyle = computed<CSSProperties>(() => ({
-	'--friend-status-delay': 'calc(var(--delay) + 0.2s)',
-}))
 
 function getInspectStyle(src: string): CSSProperties {
 	src = getMainDomain(src)
@@ -89,24 +88,13 @@ function getInspectStyle(src: string): CSSProperties {
 
 		<span class="author">{{ author }}</span>
 		<span class="sitenick">{{ sitenick }}</span>
-		<span
-			v-if="statusLabel"
-			class="friend-status-tag"
-			:class="`friend-status-tag--${statusTone}`"
-			:title="statusTip"
-			:aria-label="statusTip"
-			:style="statusStyle"
-		>
-			<span class="friend-status-pulse" aria-hidden="true" />
-			{{ statusLabel }}
-		</span>
 	</UtilLink>
 
 	<template #content>
 		<div class="site-content">
 			<NuxtImg v-if="icon" class="site-icon" :src="icon" :alt="title" />
 
-			<div class="site-info">
+				<div class="site-info">
 				<h3 class="text-creative">
 					{{ title }}
 				</h3>
@@ -116,6 +104,19 @@ function getInspectStyle(src: string): CSSProperties {
 					<Icon v-if="domainIcon" class="domain-mark" :name="domainIcon" />
 				</code>
 			</div>
+
+			<span
+				v-if="statusLabel"
+				class="friend-status"
+				:class="`friend-status--${statusTone}`"
+				:title="statusTip"
+				:aria-label="statusTip"
+			>
+				<span class="friend-status-indicator">
+					<span class="friend-status-dot" />
+				</span>
+				{{ statusLabel }}
+			</span>
 
 			<Icon
 				v-for="arch in archs" :key="arch"
@@ -138,6 +139,16 @@ function getInspectStyle(src: string): CSSProperties {
 </template>
 
 <style lang="scss" scoped>
+@keyframes pulse {
+	0%, 100% {
+		opacity: 0.4;
+	}
+
+	50% {
+		opacity: 1;
+	}
+}
+
 .feed-card {
 	display: flex;
 	align-items: center;
@@ -193,61 +204,6 @@ function getInspectStyle(src: string): CSSProperties {
 		opacity: 0.6;
 		font-size: 0.8em;
 	}
-
-	.friend-status-tag {
-		--friend-status-color: #16A34A;
-
-		display: inline-flex;
-		align-items: center;
-		gap: 0.35em;
-		position: absolute;
-		inset-block-start: -0.45em;
-		inset-inline-end: 0.45em;
-		padding: 0.1em 0.45em;
-		border: 1px solid color-mix(in srgb, var(--friend-status-color), transparent 55%);
-		border-radius: 999px;
-		box-shadow: 0 0.2em 0.8em color-mix(in srgb, var(--friend-status-color), transparent 75%);
-		background: color-mix(in srgb, var(--friend-status-color), var(--c-bg) 86%);
-		font-size: 0.65em;
-		font-weight: 700;
-		letter-spacing: 0.04em;
-		line-height: 1.4;
-		color: var(--friend-status-color);
-		animation: float-in 0.2s var(--friend-status-delay) backwards;
-	}
-
-	.friend-status-pulse {
-		flex: 0 0 auto;
-		position: relative;
-		width: 0.55em;
-		height: 0.55em;
-		border-radius: 50%;
-		box-shadow: inset 0 0 0 0.1em color-mix(in srgb, currentcolor, transparent 30%);
-		background: color-mix(in srgb, currentcolor, transparent 36%);
-
-		&::after {
-			content: "";
-			position: absolute;
-			inset: 0.08em;
-			border-radius: 50%;
-			background: currentcolor;
-		}
-	}
-
-	.friend-status-tag--offline {
-		--friend-status-color: #DC2626;
-
-		box-shadow: 0 0.2em 0.8em color-mix(in srgb, var(--friend-status-color), transparent 80%);
-		background: color-mix(in srgb, var(--friend-status-color), var(--c-bg) 88%);
-	}
-
-	.friend-status-tag--medium {
-		--friend-status-color: #2563EB;
-	}
-
-	.friend-status-tag--slow {
-		--friend-status-color: #EAB308;
-	}
 }
 
 // https://vue-tippy.netlify.app/props#appendto
@@ -290,6 +246,42 @@ function getInspectStyle(src: string): CSSProperties {
 			vertical-align: super;
 		}
 	}
+
+	.friend-status {
+		--friend-status-color: #16A34A;
+
+		display: inline-flex;
+		align-items: center;
+		gap: 0.4em;
+		font-size: 0.8em;
+		white-space: nowrap;
+		color: var(--friend-status-color);
+	}
+
+	.friend-status-indicator {
+		position: relative;
+		width: 0.9em;
+		height: 0.9em;
+		border-radius: 50%;
+		background-color: color-mix(in srgb, var(--friend-status-color) 40%, transparent);
+		animation: pulse 1.5s ease-in-out infinite;
+	}
+
+	.friend-status-dot {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		width: 0.55em;
+		height: 0.55em;
+		border-radius: 50%;
+		background-color: var(--friend-status-color);
+		transform: translate(-50%, -50%);
+	}
+
+	.friend-status--fast { --friend-status-color: #16A34A; }
+	.friend-status--medium { --friend-status-color: #2563EB; }
+	.friend-status--slow { --friend-status-color: #EAB308; }
+	.friend-status--offline { --friend-status-color: #DC2626; }
 }
 
 .desc-content {

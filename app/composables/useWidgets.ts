@@ -1,5 +1,6 @@
 import { pascal } from 'radash'
 import {
+	LazyWidgetBayiCloud,
 	LazyWidgetBlogLog,
 	LazyWidgetBlogStats,
 	LazyWidgetBlogTech,
@@ -11,6 +12,7 @@ import {
 } from '#components'
 
 const rawWidgets = {
+	LazyWidgetBayiCloud,
 	LazyWidgetBlogLog,
 	LazyWidgetBlogStats,
 	LazyWidgetBlogTech,

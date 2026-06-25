@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const MONITOR_IDS = [2]
+const MONITOR_IDS = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
 const STATUS_PAGE_URL = 'https://status.qixz.cn/status/qxz'
 const API_URL = 'https://status.qixz.cn/api/status-page/heartbeat/qxz'
 

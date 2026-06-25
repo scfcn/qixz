@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { joinURL, withLeadingSlash, withTrailingSlash } from 'ufo'
-import ImageComponent from '#build/mdc-image-component.mjs'
 
 const props = withDefaults(defineProps<{
 	src: string
@@ -33,23 +32,22 @@ onMounted(() => {
 	referrerPolicy.value = props.mirror ? 'no-referrer' : undefined
 })
 
-function onError() {
-	if (refinedSrc.value !== FALLBACK_IMG)
-		refinedSrc.value = FALLBACK_IMG
+function onError(e: Event) {
+	const img = e.target as HTMLImageElement
+	if (img.src !== FALLBACK_IMG)
+		img.src = FALLBACK_IMG
 }
 </script>
 
 <template>
-<component
-	:is="ImageComponent"
+<img
 	:src="refinedSrc"
 	:alt="alt"
 	:width="width"
 	:height="height"
 	:loading="loading"
 	:fetchpriority="fetchpriority"
-	:sizes="sizes"
 	:referrerpolicy="referrerPolicy"
 	@error="onError"
-/>
+>
 </template>
