@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import type { CSSProperties } from 'vue'
 import type { FeedEntry } from '~/types/feed'
+import { myFeed } from '~~/blog.config'
 
 const props = defineProps<FeedEntry & { nofollow?: boolean }>()
 
 const appConfig = useAppConfig()
 const route = useRoute()
+const isSelf = computed(() => props.link === myFeed.link)
 const isInspect = computed(() => import.meta.dev && route.query.inspect !== undefined)
 
 const title = computed(() => props.title ?? props.sitenick ?? props.author)
@@ -14,7 +16,7 @@ const domainIcon = computed(() => getDomainIcon(props.link))
 const latencyMs = computed(() => props.latency === undefined ? undefined : Math.round(props.latency * 1000))
 const latencySeconds = computed(() => props.latency === undefined ? undefined : Math.round(props.latency * 10) / 10)
 const statusTone = computed(() => {
-	if (props.reachable === false || props.latency === undefined)
+	if (isSelf.value || props.reachable === false || props.latency === undefined)
 		return 'offline'
 	if (props.latency > 3)
 		return 'slow'
@@ -23,8 +25,8 @@ const statusTone = computed(() => {
 	return 'fast'
 })
 const statusLabel = computed(() => {
-	if (props.reachable === false)
-		return '离线'
+	if (isSelf.value || props.reachable === false)
+		return
 	if (props.reachable && latencyMs.value !== undefined && latencyMs.value >= 0) {
 		if (props.latency > 1)
 			return `${latencySeconds.value?.toFixed(1)} S`

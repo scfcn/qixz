@@ -126,8 +126,8 @@ CF优选
 
 | 指标 | 数值 |
 | --- | --- |
-| 延迟 | ![ping](https://up.qixz.cn/api/badge/10/ping/1?color=%2366c534&labelColor=%232f5a11) |
-| 可用性 | ![uptime](https://up.qixz.cn/api/badge/10/uptime/1?color=%2366c534&labelColor=%232f5a11) |
+| 延迟 | ![ping](https://status.qixz.cn/api/badge/10/ping/1?color=%2366c534&labelColor=%232f5a11) |
+| 可用性 | ![uptime](https://status.qixz.cn/api/badge/10/uptime/1?color=%2366c534&labelColor=%232f5a11) |
 | 节点数量 | 20 个 |
 
 **服务状态**：

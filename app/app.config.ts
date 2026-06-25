@@ -66,7 +66,7 @@ export default defineAppConfig({
 					{ icon: 'ri:subway-line', text: '开往', url: 'https://www.travellings.cn/plain.html' },
 					{ icon: 'ph:bug-droid-bold', text: '揪蝉', url: 'https://www.jiuchan.org/' },
 					{ icon: 'streamline-ultimate-color:blogger-logo', text: 'BlogsClub', url: 'https://www.blogsclub.org/' },
-					{ icon: 'logos:blogger', text: '笔墨迹', url: 'https://blogscn.fun/' },
+					{ icon: 'ph:cloud-bold', text: '八壹云', url: '/81x' },
 				],
 			},
 			{

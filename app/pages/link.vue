@@ -13,9 +13,38 @@ const { data: postLink } = await useAsyncData(
 	() => queryCollection('content').path('/link').first(),
 )
 
-const { data: friendStatusData } = await useFetch<FriendStatusData>('https://fc.qixz.cn/link.json', {
-	key: 'friend-status',
-})
+const FRIEND_STATUS_KEY = 'friend-status-cache'
+const FRIEND_STATUS_TTL = 60 * 60 * 1000 // 1 hour
+
+function getCachedFriendStatus(): FriendStatusData | undefined {
+	try {
+		const raw = localStorage.getItem(FRIEND_STATUS_KEY)
+		if (!raw)
+			return
+		const cached = JSON.parse(raw) as FriendStatusData & { _ts: number }
+		if (Date.now() - cached._ts > FRIEND_STATUS_TTL) {
+			localStorage.removeItem(FRIEND_STATUS_KEY)
+			return
+		}
+		return cached
+	}
+	catch {
+		return
+	}
+}
+
+const { data: friendStatusData } = await useAsyncData<FriendStatusData>(
+	'friend-status',
+	async () => {
+		const data = await $fetch<FriendStatusData>('https://fc.qixz.cn/link.json')
+		try {
+			localStorage.setItem(FRIEND_STATUS_KEY, JSON.stringify({ ...data, _ts: Date.now() }))
+		}
+		catch {}
+		return data
+	},
+	{ server: false, getCachedData: getCachedFriendStatus },
+)
 
 const feedGroups = computed<FeedGroup[]>(() => withFriendStatuses(feeds, friendStatusData.value))
 
