@@ -15,36 +15,7 @@ const errorMessage = ref('')
 const normalizedPath = computed(() => props.path || route.path)
 const commentId = computed(() => `twikoo-${normalizedPath.value.replace(/[^\w-]/g, '-').replace(/^-+|-+$/g, '') || 'root'}`)
 
-const COMMENT_FALLBACK_IMG = 'https://s3.qixz.cn/ywty/2026/06/20/6a366d2bcda01.webp'
-
 let retryTimer: ReturnType<typeof setTimeout> | undefined
-let imgObserver: MutationObserver | undefined
-
-function bindCommentImageFallback(container: HTMLElement) {
-	const images = container.querySelectorAll('img')
-	images.forEach((img) => {
-		if (img.dataset.fallbackBound)
-			return
-		img.dataset.fallbackBound = '1'
-		img.addEventListener('error', () => {
-			if (img.src !== COMMENT_FALLBACK_IMG)
-				img.src = COMMENT_FALLBACK_IMG
-		}, { once: true })
-	})
-}
-
-function observeCommentImages(container: HTMLElement) {
-	bindCommentImageFallback(container)
-	imgObserver = new MutationObserver((mutations) => {
-		for (const mutation of mutations) {
-			for (const node of mutation.addedNodes) {
-				if (node instanceof HTMLElement)
-					bindCommentImageFallback(node)
-			}
-		}
-	})
-	imgObserver.observe(container, { childList: true, subtree: true })
-}
 
 async function initTwikoo(retry = 0) {
 	if (!import.meta.client)
@@ -79,9 +50,6 @@ async function initTwikoo(retry = 0) {
 			path: normalizedPath.value,
 		})
 		status.value = 'ready'
-		const host = document.getElementById(commentId.value)
-		if (host)
-			observeCommentImages(host)
 	}
 	catch {
 		status.value = 'error'
@@ -96,8 +64,6 @@ onMounted(() => {
 onBeforeUnmount(() => {
 	if (retryTimer)
 		clearTimeout(retryTimer)
-	if (imgObserver)
-		imgObserver.disconnect()
 })
 </script>
 
